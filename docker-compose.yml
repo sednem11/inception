@@ -1,0 +1,25 @@
+
+services:
+  mariadb:
+    build: srcs/mariadb/.
+    container_name: mariadb
+  wordpress:
+    build: srcs/wordpress/.
+    container_name: wp-php
+    volumes:
+      - ./web:/var/www/html
+    depends_on:
+      - mariadb
+    ports:
+      - "8064:80"
+  nginx:
+    build: srcs/nginx/.
+    container_name: nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - wordpress
+    volumes:
+      - ./web:/var/www/html
+volumes:
+  mariadb_data:

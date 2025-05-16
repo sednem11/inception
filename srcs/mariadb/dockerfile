@@ -1,0 +1,10 @@
+
+FROM debian:latest
+
+RUN apt update && apt upgrade && apt install -y mariadb-server
+
+COPY 50-server.cnf /etc/mysql/mariadb.conf.d/.
+
+RUN mkdir /run/mysql
+
+CMD ["mysqld_safe"]
