@@ -1,8 +1,7 @@
+FROM debian:bullseye
 
-FROM debian:latest
+RUN apt-get update && apt-get install -y php8.2-fpm && rm -rf /var/lib/apt/lists/*
 
-RUN apt update && apt install -y php-fpm
-
-COPY www.conf /etc/php/8.2/fpm/pool.d/.
+COPY www.conf /etc/php/8.2/fpm/pool.d/
 
 CMD ["php-fpm8.2", "-F"]

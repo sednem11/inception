@@ -1,10 +1,11 @@
+FROM debian:bullseye
 
-FROM debian:latest
+RUN apt-get update && apt-get install -y mariadb-server && rm -rf /var/lib/apt/lists/*
 
-RUN apt update && apt install -y mariadb-server
+COPY 50-server.cnf /etc/mysql/mariadb.conf.d/
 
-COPY 50-server.cnf /etc/mysql/mariadb.conf.d/.
+RUN mkdir -p /run/mysqld && chown mysql:mysql /run/mysqld
 
-RUN mkdir /run/mysql
+USER mysql
 
-CMD ["mysqld_safe"]
+CMD ["mysqld"]
