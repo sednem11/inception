@@ -12,4 +12,3 @@ RUN mkdir -p /run/php
 COPY www.conf /etc/php/8.2/fpm/pool.d/
 
 CMD ["php-fpm8.2", "-F"]
-
