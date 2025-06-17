@@ -5,11 +5,12 @@ services:
     container_name: mariadb
     volumes:
       - mariadb_data:/var/lib/mysql
+    .env: ../.env
     environment:
-      - MYSQL_ROOT_PASSWORD=1234
-      - MYSQL_DATABASE=wordpress
-      - MYSQL_USER=macampos
-      - MYSQL_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD={$MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE={$MYSQL_DATABASE}
+      - MYSQL_USER={$MYSQL_USER}
+      - MYSQL_PASSWORD={$MYSQL_PASSWORD}
     networks:
       - inception
     restart: always
@@ -22,11 +23,12 @@ services:
       - wordpress_files:/var/www/html
     depends_on:
       - mariadb
+    .env: ../.env
     environment:
-      - WORDPRESS_DB_HOST=mariadb:3306
-      - WORDPRESS_DB_USER=macampos
-      - WORDPRESS_DB_PASSWORD=1234
-      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_DB_HOST={$WORDPRESS_DB_HOST}
+      - WORDPRESS_DB_USER={$WORDPRESS_DB_USER}
+      - WORDPRESS_DB_PASSWORD={$WORDPRESS_DB_PASSWORD}
+      - WORDPRESS_DB_NAME={$WORDPRESS_DB_NAME}
     networks:
       - inception
     restart: always
@@ -49,10 +51,10 @@ volumes:
   mariadb_data:
   wordpress_files:
     driver: local
-    # driver opts:
-    #   type: none
-    #   o: bind
-    #   device: ~data/wordpress_files
+    driver opts:
+      type: none
+      o: bind
+      device: ~data/wordpress_files
 
 networks:
   inception:

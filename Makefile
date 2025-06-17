@@ -11,6 +11,7 @@
 # **************************************************************************** #
 
 up:
+	mkdir -p /home/macampos/data
 	docker compose -f ./srcs/docker-compose.yml up --build
 
 upd:
@@ -28,6 +29,7 @@ stop:
 	docker compose -f ./srcs/docker-compose.yml  stop
 
 fclean: down
+		sudo rm -rf /home/macampos/data
 		docker system prune -a -f --volumes
 		docker volume prune -f
 		docker rmi -f srcs-mariadb || true
