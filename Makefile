@@ -15,6 +15,7 @@ up:
 	docker compose -f ./srcs/docker-compose.yml up --build
 
 upd:
+	mkdir -p /home/macampos/data
 	docker compose -f ./srcs/docker-compose.yml up --build -d
 
 start:

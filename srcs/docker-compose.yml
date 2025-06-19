@@ -5,12 +5,12 @@ services:
     container_name: mariadb
     volumes:
       - mariadb_data:/var/lib/mysql
-    .env: ../.env
-    environment:
-      - MYSQL_ROOT_PASSWORD={$MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE={$MYSQL_DATABASE}
-      - MYSQL_USER={$MYSQL_USER}
-      - MYSQL_PASSWORD={$MYSQL_PASSWORD}
+    env_file: ../.env
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - inception
     restart: always
@@ -22,13 +22,9 @@ services:
     volumes:
       - wordpress_files:/var/www/html
     depends_on:
-      - mariadb
-    .env: ../.env
-    environment:
-      - WORDPRESS_DB_HOST={$WORDPRESS_DB_HOST}
-      - WORDPRESS_DB_USER={$WORDPRESS_DB_USER}
-      - WORDPRESS_DB_PASSWORD={$WORDPRESS_DB_PASSWORD}
-      - WORDPRESS_DB_NAME={$WORDPRESS_DB_NAME}
+      mariadb:
+        condition: service_healthy
+    env_file: ../.env
     networks:
       - inception
     restart: always
@@ -49,12 +45,17 @@ services:
 
 volumes:
   mariadb_data:
-  wordpress_files:
-    driver: local
-    driver opts:
+    name: mariadb
+    driver_opts:
       type: none
       o: bind
-      device: ~data/wordpress_files
+      device: /home/macampos/data
+  wordpress_files:
+    name: wordPress
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/macampos/data
 
 networks:
   inception:

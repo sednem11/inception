@@ -2,12 +2,12 @@ FROM debian:bullseye
 
 RUN apt-get update && apt-get install -y mariadb-server && rm -rf /var/lib/apt/lists/*
 
-COPY /tools/50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY /tools/mariadb.sh /bin/script.sh
 
-RUN chmod +x /bin/scropt.sh
+RUN chmod +x /bin/script.sh
 
 RUN mkdir -p /run/mysqld && chown mysql:mysql /run/mysqld
 
-USER mysql
+ENTRYPOINT ["/bin/script.sh"]
 
-CMD ["mysqld"]
+CMD ["mysqld_safe", "--bind-address=0.0.0.0"]
